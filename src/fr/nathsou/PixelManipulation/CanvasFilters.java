@@ -67,37 +67,6 @@ public abstract class CanvasFilters {
         return new Canvas2D(detector.getEdgesImage());
     }
 
-    public static Canvas2D threshold(Canvas2D cnv, int nbSquare, float fluct) { //The canvas get cut in approximatly nbSquare regions
-
-        cnv = grayScale(cnv);
-        int sq = (int) Math.sqrt(cnv.getPixels().size() / (nbSquare));
-        float avgIntensity;
-
-        int i = 0;
-        for (int y = i; y < cnv.getHeight(); y++) {
-            for (int x = 0; x < cnv.getWidth(); x += sq) {
-                i++;
-                avgIntensity = 0;
-
-                for (Color c : cnv.getRegionPixels(new Point(x, y), new Point(x + sq, y + sq))) {
-                    avgIntensity += c.getRed();
-                }
-
-                avgIntensity /= (sq * sq);
-
-                for (int y2 = 0; y2 <= y; y2++) {
-                    for (int x2 = 0; x2 <= x; x2++) {
-                        //System.out.println(x2 + " " +y2);
-                        cnv.setRGB(x2, y2, (cnv.getRGB(x2, y2).getRed() > avgIntensity - fluct) ? Color.white : Color.black);
-                    }
-                }
-
-            }
-        }
-
-        return cnv;
-    }
-
     public static Canvas2D treshold(Canvas2D cnv, int sq, float fluct) {
         cnv = grayScale(cnv);
         Point p1, p2;
