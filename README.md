@@ -116,7 +116,8 @@ CanvasFilters.filterColor(canvas, new Color(154, 139, 130), 25);
 
 ##Combining filters
 ```java
-        CanvasFilters.naiveTreshold(canvas, 10);
-        CanvasFilters.filterColor(canvas, Color.black, 1, Color.orange);
+CanvasFilters.pixelize(canvas, 2);
+CanvasFilters.naiveTreshold(canvas, 10);
+CanvasFilters.replaceColor(canvas, Color.white, Color.orange, 1);
 ```
-![Combining](http://nathsou.fr/iup/u/3659-canvas.png)
+![Combining](http://nathsou.fr/iup/u/fbaa-canvas.png)
