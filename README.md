@@ -37,6 +37,7 @@ canvas.setStrokeColor(Color.red);
 canvas.draw(heptagon);
         
 canvas.fillRegion(new Point(0, 350), new Point(700, 700), Color.black);
+
 Polygon square = new Rectangle(new Point(175, 525), 150, 150);
 canvas.setStrokeColor(Color.white);
 canvas.draw(square);
