@@ -37,6 +37,7 @@ canvas.setStrokeColor(Color.red);
 canvas.draw(heptagon);
         
 canvas.fillRegion(new Point(0, 350), new Point(700, 700), Color.black);
+
 Polygon square = new Rectangle(new Point(175, 525), 150, 150);
 canvas.setStrokeColor(Color.white);
 canvas.draw(square);
@@ -115,7 +116,8 @@ CanvasFilters.filterColor(canvas, new Color(154, 139, 130), 25);
 
 ##Combining filters
 ```java
+CanvasFilters.pixelize(canvas, 2);
 CanvasFilters.naiveTreshold(canvas, 10);
-CanvasFilters.replaceColor(canvas, Color.black, Color.pink, 50);
+CanvasFilters.replaceColor(canvas, Color.white, Color.orange, 1);
 ```
-![Combining](http://nathsou.fr/iup/u/72a6-canvas.png)
+![Combining](http://nathsou.fr/iup/u/fbaa-canvas.png)
