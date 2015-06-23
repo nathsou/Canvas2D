@@ -85,7 +85,14 @@ public class Polygon {
 
     }
 
-    //Getters & Setter
+    public void translate(int x, int y){
+        for(Point p : vertices){
+            p.x += x;
+            p.y += y;
+        }
+    }
+
+    //Getters & Setters
 
     public void setVertices(Point[] vertices) {
         this.vertices = new ArrayList<Point>(Arrays.asList(vertices));

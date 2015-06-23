@@ -9,11 +9,13 @@ import java.util.ArrayList;
 public class Circle extends Polygon{
 
     private double radius, radAngle;
+    private Point center;
 
     public Circle(Point center, double radius, double radAngle) {
 
         super(new ArrayList<Point>());
 
+        this.center = center;
         this.radius = radius;
         this.radAngle = (radAngle > 2 * Math.PI) ? radAngle % (2 * Math.PI) : radAngle;
 
@@ -52,4 +54,9 @@ public class Circle extends Polygon{
     public double getArea(){
         return (radAngle/(2*Math.PI))*Math.PI * Math.pow(radius, 2);
     }
+
+    public Point getCenter() {
+        return center;
+    }
+
 }

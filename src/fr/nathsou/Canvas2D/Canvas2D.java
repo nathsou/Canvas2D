@@ -2,8 +2,11 @@ package fr.nathsou.Canvas2D;
 
 import fr.nathsou.Canvas2D.Shapes.Polygon;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -50,11 +53,15 @@ public class Canvas2D {
 
     }
 
-    public void clear(Color color) {
+    public void fill(Color color) {
 
         for (int i = 1; i < pixels.size(); i++) {
             pixels.set(i, color);
         }
+    }
+
+    public void clear(){
+        pixels = layouts.get(0).getPixels();
     }
 
 
@@ -304,5 +311,9 @@ public class Canvas2D {
         }
 
         return image;
+    }
+
+    public void saveAsImage(File file) throws IOException{
+        ImageIO.write(toBufferedImage(), "png", file);
     }
 }
