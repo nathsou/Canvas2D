@@ -1,5 +1,4 @@
 package fr.nathsou;
-
 import fr.nathsou.Canvas2D.Canvas2D;
 import fr.nathsou.Canvas2D.PixelManipulation.CanvasFilters;
 import fr.nathsou.Canvas2D.Pixmap;
