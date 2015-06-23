@@ -53,7 +53,7 @@ canvas.draw(circle);
 
 You can also draw non regular polygons:
 ```java
-Polygon strangePolygon = new Polygon(new Point[]{
+Polygon weirdPolygon = new Polygon(new Point[]{
          new Point(100, 200),
          new Point(150, 80),
          new Point(227, 169),
@@ -79,12 +79,13 @@ The CanvasFilters abstract class offers some image filters such as:
 ####Gray scaling
 
 ```java
-Canvas2D canvas = new Canvas2D(new File("Pictures/larc-de-triomphe-paris-eugene-galien-laloue.jpg"));
+//To manipulate images, Canvas2D uses its own Pixmap class
+Canvas2D canvas = new Canvas2D(new Pixmap("Pictures/larc-de-triomphe-paris-eugene-galien-laloue.jpg")));
 CanvasFilters.grayScale(canvas);
 ```
 ![GrayScaling](http://nathsou.fr/iup/u/f576-canvas.png)
 
-####Negative
+####Negative/Inverse
 ```java
 CanvasFilters.negative(canvas);
 ```
@@ -102,9 +103,9 @@ CanvasFilters.cannyEdge(canvas);
 ```
 ![CannyEdgeDetection](http://nathsou.fr/iup/u/9125-canvas.png)
 
-####Pixelisation
+####Pixelization
 ```java
-CanvasFilters.pixelize(canvas, 5);
+CanvasFilters.pixelate(canvas, 5);
 ```
 ![Pixelisation](http://nathsou.fr/iup/u/6488-canvas.png)
 
@@ -116,7 +117,7 @@ CanvasFilters.filterColor(canvas, new Color(154, 139, 130), 25);
 
 ##Combining filters
 ```java
-CanvasFilters.pixelize(canvas, 2);
+CanvasFilters.pixelate(canvas, 2);
 CanvasFilters.naiveTreshold(canvas, 10);
 CanvasFilters.replaceColor(canvas, Color.white, Color.orange, 1);
 ```
