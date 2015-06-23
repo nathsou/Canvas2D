@@ -1,7 +1,9 @@
-package fr.nathsou.PixelManipulation;
+package fr.nathsou.Canvas2D.PixelManipulation;
 
 
-import fr.nathsou.Canvas.Canvas2D;
+import fr.nathsou.Canvas2D.Canvas2D;
+import fr.nathsou.Canvas2D.PixelTools;
+import fr.nathsou.Canvas2D.Pixmap;
 
 import java.awt.*;
 import java.io.IOException;
@@ -64,7 +66,7 @@ public abstract class CanvasFilters {
         detector.setSourceImage(cnv.toBufferedImage());
         detector.process();
 
-        return new Canvas2D(detector.getEdgesImage());
+        return new Canvas2D(new Pixmap(detector.getEdgesImage()));
     }
 
     public static Canvas2D treshold(Canvas2D cnv, int sq, float fluct) {
@@ -90,7 +92,7 @@ public abstract class CanvasFilters {
         return cnv;
     }
 
-    public static Canvas2D pixelize(Canvas2D cnv, int sq) {
+    public static Canvas2D pixelate(Canvas2D cnv, int sq, boolean grid) {
 
         //int sq = (int) Math.sqrt(cnv.getPixels().size() / nbPixel);
         Point p1, p2;
@@ -102,21 +104,27 @@ public abstract class CanvasFilters {
                 Color avg = PixelTools.averageColor(p1, p2, cnv);
                 cnv.fillRegion(p1, p2, avg);
 
-                /*
-                for (int y2 = p1.y; y2 < p2.y; y2++) {
-                    for (int x2 = p1.x; x2 < p2.x; x2++) {
-                        //cnv.setRGB(x2, y2, avg);
-                        cnv.drawLine(p1, new Point(p2.x, p1.y));
-                        cnv.drawLine(p1, new Point(p1.x, p2.y));
-                        cnv.drawLine(new Point(p1.x, p2.y), p2);
+                if (grid) {
+                    for (int y2 = p1.y; y2 < p2.y; y2++) {
+                        for (int x2 = p1.x; x2 < p2.x; x2++) {
+                            //cnv.setRGB(x2, y2, avg);
+                            cnv.drawLine(p1, new Point(p2.x, p1.y));
+                            cnv.drawLine(p1, new Point(p1.x, p2.y));
+                            cnv.drawLine(new Point(p1.x, p2.y), p2);
+                        }
                     }
                 }
-                */
+
             }
         }
 
 
         return cnv;
+    }
+
+    public static Canvas2D pixelate(Canvas2D cnv, int sq) {
+
+        return pixelate(cnv, sq, false);
     }
 
     public static Canvas2D filterColor(Canvas2D cnv, Color c, float sigma){
@@ -128,7 +136,7 @@ public abstract class CanvasFilters {
         return cnv;
     }
 
-    public static Canvas2D filterColor(Canvas2D cnv, Color c, float sigma, Color replacementColor){
+    public static Canvas2D filterColor(Canvas2D cnv, Color c, Color replacementColor, float sigma) {
 
         for (int i = 0; i < cnv.getPixels().size(); i++) {
             cnv.setNthPixel(i, (PixelTools.colorDistance(c, cnv.getPixels().get(i)) < sigma)?cnv.getPixels().get(i):replacementColor);

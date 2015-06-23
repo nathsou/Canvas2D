@@ -1,6 +1,6 @@
-package fr.nathsou.Canvas.Shapes;
+package fr.nathsou.Canvas2D.Shapes;
 
-import java.awt.Point;
+import java.awt.*;
 
 /**
  * Created by nathansoufflet on 07/06/15.

@@ -1,4 +1,4 @@
-package fr.nathsou.Canvas.Shapes;
+package fr.nathsou.Canvas2D.Shapes;
 
 /**
  * Created by nathansoufflet on 07/06/15.

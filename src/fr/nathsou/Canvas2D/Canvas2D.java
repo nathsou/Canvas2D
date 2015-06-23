@@ -1,13 +1,9 @@
-package fr.nathsou.Canvas;
+package fr.nathsou.Canvas2D;
 
-import fr.nathsou.Canvas.Shapes.Polygon;
+import fr.nathsou.Canvas2D.Shapes.Polygon;
 
-import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.Color;
-import java.awt.Point;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -15,6 +11,8 @@ import java.util.ArrayList;
  */
 public class Canvas2D {
 
+    private ArrayList<Pixmap> layouts = new ArrayList<Pixmap>();
+    private ArrayList<Point> layoutsPositions = new ArrayList<Point>();
     private ArrayList<Color> pixels = new ArrayList<Color>();
     private int width, height;
     private Color strokeColor = Color.black;
@@ -22,44 +20,33 @@ public class Canvas2D {
 
     public Canvas2D(int width, int height, Color color) {
 
+        if (pixels.size() > 0) {
+            pixels.clear();
+        }
+
         this.width = width;
         this.height = height;
 
         for (int i = 0; i < width * (height + 1); i++) {
             pixels.add(color);
         }
+
+        layouts.add(new Pixmap(pixels, width, height));
+        layoutsPositions.add(new Point(0, 0));
     }
 
-    public Canvas2D(ArrayList<Color> pixels, int width, int height) {
-        if (pixels.size() == width * height) {
-            this.pixels = pixels;
-            this.width = width;
-            this.height = height;
-        } else {
-            throw new NumberFormatException("Wrong width or/and height parameters");
+    public Canvas2D(Pixmap img) {
+
+        if (pixels.size() > 0) {
+            pixels.clear();
         }
-    }
-
-    public Canvas2D(File image) throws IOException {
-
-        BufferedImage img = ImageIO.read(image);
-        width = img.getWidth();
-        height = img.getHeight();
-
-        for (int i = 0; i < width * height; i++) {
-            pixels.add(new Color(img.getRGB(i % width, (int) Math.floor(i / width))));
-        }
-
-    }
-
-    public Canvas2D(BufferedImage img) {
 
         width = img.getWidth();
         height = img.getHeight();
 
-        for (int i = 0; i < width * height; i++) {
-            pixels.add(new Color(img.getRGB(i % width, (int) Math.floor(i / width))));
-        }
+        pixels = img.getPixels();
+        layouts.add(new Pixmap(pixels, width, height));
+        layoutsPositions.add(new Point(0, 0));
 
     }
 
@@ -118,18 +105,60 @@ public class Canvas2D {
     }
 
 
-    public BufferedImage toBufferedImage() {
+    //LAYOUTS
 
-        BufferedImage image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    public void addLayout(Pixmap pixmap, Point position) {
 
-        for (int x = 0; x < this.getWidth(); x++) {
-            for (int y = 0; y < this.getHeight(); y++) {
-                image.setRGB(x, y, this.getRGB(x, y).getRGB());
+        layouts.add(pixmap);
+        layoutsPositions.add(position);
+    }
+
+    private void renderLayouts() {
+
+        for (int i = 0; i < layouts.size(); i++) {
+            if (layouts.get(i).isVisible()) {
+                for (int y = layoutsPositions.get(i).y; y < layoutsPositions.get(i).y + layouts.get(i).getHeight(); y++) {
+                    for (int x = layoutsPositions.get(i).x; x < layoutsPositions.get(i).x + layouts.get(i).getWidth(); x++) {
+                        setRGB(x, y, layouts.get(i).getPixels().get((y - layoutsPositions.get(i).y) * layouts.get(i).getWidth() + (x - layoutsPositions.get(i).x)));
+                    }
+                }
             }
         }
-
-        return image;
     }
+
+    public void removeLayout(Pixmap layout) {
+
+        if (layouts.contains(layout)) {
+            layoutsPositions.remove(layouts.indexOf(layout));
+            layouts.remove(layout);
+
+            renderLayouts();
+        }
+    }
+
+    public void removeLayout(int layoutIndex) {
+
+        removeLayout(layouts.get(layoutIndex));
+    }
+
+    public void showLayout(int layoutIndex) {
+        layouts.get(layoutIndex).setVisible(true);
+    }
+
+    public void showLayout(Pixmap layout) {
+        layouts.get(layouts.indexOf(layout)).setVisible(true);
+    }
+
+    public void hideLayout(int layoutIndex) {
+        layouts.get(layoutIndex).setVisible(false);
+    }
+
+    public void hideLayout(Pixmap layout) {
+        layouts.get(layouts.indexOf(layout)).setVisible(false);
+    }
+
+    //END LAYOUTS
+
 
     public Point getCameraPosition() {
         return camera;
@@ -146,7 +175,7 @@ public class Canvas2D {
 
     //Getters & Setters
 
-    public ArrayList<Color> getRegionPixels(Point p1, Point p2) {
+    public ArrayList<Color> getRegion(Point p1, Point p2) {
 
         ArrayList<Color> region = new ArrayList<Color>();
 
@@ -159,25 +188,6 @@ public class Canvas2D {
         }
 
         return region;
-    }
-
-    public BufferedImage getRegionBufferedImage(Point p1, Point p2) {
-
-        int h = p2.y - p1.y;
-        int w = p2.x - p1.x;
-
-        BufferedImage buf = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-
-        for (int y = p1.y; y < p2.y; y++) {
-            for (int x = p1.x; x < p2.x; x++) {
-                if (!(x < 0 || x > width || y < 0 || y > height)) {
-                    buf.setRGB(x - p1.x, y - p1.y, getRGB(x, y).getRGB());
-                }
-            }
-        }
-
-
-        return buf;
     }
 
 
@@ -214,7 +224,7 @@ public class Canvas2D {
         setRGB(p.x, p.y, strokeColor);
     }
 
-    public void setNthPixel(int n, Color c){
+    public void setNthPixel(int n, Color c) {
         pixels.set(n, c);
     }
 
@@ -238,16 +248,61 @@ public class Canvas2D {
 
     }
 
+    /*
+        public Canvas2D getResizedCanvas(float sq){
+
+            ArrayList<Color> pxls = new ArrayList<Color>();
+                //int sq = (int) Math.sqrt(cnv.getPixels().size() / nbPixel);
+                Point p1, p2;
+                for (float y = sq; y <= this.getHeight() + sq; y += sq) {
+                    for (float x = 0; x <= this.getWidth(); x += sq) {
+                        p1 = new Point((int)x, (int)(y - sq));
+                        p2 = new Point((int)(x + sq), (int)y);
+                        Color avg = PixelTools.averageColor(p1, p2, this);
+                        if(x >= 0 && x < width && y >= 0 && y < height) {
+                            pxls.add(avg);
+                        }
+
+                    }
+                    System.out.println((width/sq)*(height/sq) + " " + pxls.size());
+                }
+            return new Canvas2D(pxls, (int)(width/sq), (int)(height/sq));
+        }
+    */
+
 
     public ArrayList<Color> getPixels() {
         return pixels;
+    }
+
+    public Color getStrokeColor() {
+        return strokeColor;
     }
 
     public void setStrokeColor(Color color) {
         strokeColor = color;
     }
 
-    public Color getStrokeColor() {
-        return strokeColor;
+
+    //CONVERSIONS
+
+    public Pixmap toPixmap() {
+
+        return new Pixmap(pixels, width, height);
+    }
+
+    public BufferedImage toBufferedImage() {
+
+        renderLayouts();
+
+        BufferedImage image = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+
+        for (int x = 0; x < this.getWidth(); x++) {
+            for (int y = 0; y < this.getHeight(); y++) {
+                image.setRGB(x, y, this.getRGB(x, y).getRGB());
+            }
+        }
+
+        return image;
     }
 }

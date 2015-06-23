@@ -1,4 +1,4 @@
-package fr.nathsou.PixelManipulation;
+package fr.nathsou.Canvas2D.PixelManipulation;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;

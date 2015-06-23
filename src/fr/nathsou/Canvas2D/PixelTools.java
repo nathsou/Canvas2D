@@ -1,9 +1,6 @@
-package fr.nathsou.PixelManipulation;
+package fr.nathsou.Canvas2D;
 
-import fr.nathsou.Canvas.Canvas2D;
-
-import java.awt.Point;
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -29,7 +26,7 @@ public abstract class PixelTools {
 
     public static Color averageColor(Point p1, Point p2, Canvas2D cnv) {
 
-        return averageColor(cnv.getRegionPixels(p1, p2));
+        return averageColor(cnv.getRegion(p1, p2));
     }
 
     public static float colorDistance(Color a, Color b){

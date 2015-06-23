@@ -1,8 +1,8 @@
-package fr.nathsou.Canvas.Shapes;
+package fr.nathsou.Canvas2D.Shapes;
 
-import fr.nathsou.Canvas.Canvas2D;
+import fr.nathsou.Canvas2D.Canvas2D;
 
-import java.awt.Point;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -91,12 +91,12 @@ public class Polygon {
         this.vertices = new ArrayList<Point>(Arrays.asList(vertices));
     }
 
-    public void setVertices(ArrayList<Point> vertices) {
-        this.vertices = vertices;
-    }
-
     public Point[] getVertices() {
         return vertices.toArray(new Point[vertices.size()]);
+    }
+
+    public void setVertices(ArrayList<Point> vertices) {
+        this.vertices = vertices;
     }
 
     public int getVerticesNumber() {
