@@ -81,44 +81,44 @@ The CanvasFilters abstract class offers some image filters such as:
 ```java
 //To manipulate images, Canvas2D uses its own Pixmap class
 Canvas2D canvas = new Canvas2D(new Pixmap("Pictures/larc-de-triomphe-paris-eugene-galien-laloue.jpg")));
-CanvasFilters.grayScale(canvas);
+canvas = CanvasFilters.grayScale(canvas);
 ```
 ![GrayScaling](http://nathsou.fr/iup/u/f576-canvas.png)
 
 ####Negative/Inverse
 ```java
-CanvasFilters.negative(canvas);
+canvas = CanvasFilters.negative(canvas);
 ```
 ![Negative](http://nathsou.fr/iup/u/91a4-canvas.png)
 
 #####Threshold
 ```java
-CanvasFilters.naiveTreshold(canvas, 10);
+canvas = CanvasFilters.naiveTreshold(canvas, 10);
 ```
 ![Threshold](http://nathsou.fr/iup/u/bdc3-canvas.png)
 
 ####Canny Edge Detection
 ```java
-CanvasFilters.cannyEdge(canvas);
+canvas = CanvasFilters.cannyEdge(canvas);
 ```
 ![CannyEdgeDetection](http://nathsou.fr/iup/u/9125-canvas.png)
 
 ####Pixelization
 ```java
-CanvasFilters.pixelate(canvas, 5);
+canvas = CanvasFilters.pixelate(canvas, 5);
 ```
 ![Pixelisation](http://nathsou.fr/iup/u/6488-canvas.png)
 
 ####Color filtering
 ```java
-CanvasFilters.filterColor(canvas, new Color(154, 139, 130), 25);
+canvas = CanvasFilters.filterColor(canvas, new Color(154, 139, 130), 25);
 ```
 ![ColorFiltering](http://nathsou.fr/iup/u/6139-canvas.png)
 
 ##Combining filters
 ```java
-CanvasFilters.pixelate(canvas, 2);
-CanvasFilters.naiveTreshold(canvas, 10);
-CanvasFilters.replaceColor(canvas, Color.white, Color.orange, 1);
+canvas = CanvasFilters.pixelate(canvas, 2);
+canvas = CanvasFilters.naiveTreshold(canvas, 10);
+canvas = CanvasFilters.replaceColor(canvas, Color.white, Color.orange, 1);
 ```
 ![Combining](http://nathsou.fr/iup/u/fbaa-canvas.png)
