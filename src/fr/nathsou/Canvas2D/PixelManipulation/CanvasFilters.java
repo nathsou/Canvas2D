@@ -72,29 +72,25 @@ public abstract class CanvasFilters {
         return new Canvas2D(new Pixmap(detector.getEdgesImage()));
     }
 
-    public static Canvas2D treshold(Canvas2D cnv, int sq, float fluct) {
+
+    public static Canvas2D treshold(Canvas2D cnv, int tresh, int maxValue) {
         Canvas2D copy = cnv;
         copy = grayScale(copy);
-        Point p1, p2;
-        for (int y = sq; y <= copy.getHeight() + sq; y += sq) {
-            for (int x = 0; x <= copy.getWidth(); x += sq) {
-                p1 = new Point(x, y - sq);
-                p2 = new Point(x + sq, y);
+        Color m = new Color(maxValue, maxValue, maxValue);
 
-                Color avg = PixelTools.averageColor(p1, p2, copy);
-                //cnv.fillRegion(p1, p2, avg);
-                for (int y2 = p1.y; y2 < p2.y; y2++) {
-                    for (int x2 = p1.x; x2 < p2.x; x2++) {
-                        copy.setRGB(x2, y2, (PixelTools.colorDistance(copy.getRGB(x2, y2), avg) < fluct)?Color.white:Color.black);
-                    }
-                }
-
-            }
+        for(int i = 0; i < copy.getPixels().size(); i++){
+            copy.setNthPixel(i, (copy.getPixels().get(i).getRed() > tresh)?m:Color.black);
         }
-
 
         return copy;
     }
+
+    public static Canvas2D treshold(Canvas2D cnv, int tresh) {
+
+        return treshold(cnv, tresh, 255);
+    }
+
+
 
     public static Canvas2D pixelate(Canvas2D cnv, int sq, boolean grid) {
 

@@ -16,6 +16,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         Canvas2D canvas = new Canvas2D(new Pixmap(new File("/Users/nathansoufflet/Pictures/laloue.jpeg")));
+        canvas = CanvasFilters.treshold(canvas, 127);
 
         CanvasFrame frame = new CanvasFrame(canvas);
         frame.setVisible(true);
