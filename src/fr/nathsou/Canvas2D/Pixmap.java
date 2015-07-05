@@ -60,6 +60,21 @@ public class Pixmap { //Basically an image
         }
     }
 
+    public Pixmap(String path) throws IOException {
+
+        if (pixels.size() > 0) {
+            pixels.clear();
+        }
+
+        BufferedImage img = ImageIO.read(new File(path));
+        width = img.getWidth();
+        height = img.getHeight();
+
+        for (int i = 0; i < width * height; i++) {
+            pixels.add(new Color(img.getRGB(i % width, (int) Math.floor(i / width))));
+        }
+    }
+
     //Getters && Setters
 
     public ArrayList<Color> getPixels() {

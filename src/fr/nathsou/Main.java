@@ -15,11 +15,17 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        Canvas2D canvas = new Canvas2D(new Pixmap(new File("/Users/nathansoufflet/Pictures/laloue.jpeg")));
-        canvas = CanvasFilters.treshold(canvas, 127);
+        Canvas2D canvas = new Canvas2D(400, 400, Color.white);
 
-        CanvasFrame frame = new CanvasFrame(canvas);
-        frame.setVisible(true);
+
+        canvas.drawLine(new Point(100, 200), new Point(300, 200));
+
+        ArrayList<Integer> chain = CanvasFilters.findContour(canvas, new Point(100, 200));
+
+        System.out.println(chain.size());
+
+        canvas.saveAsImage(new File("/Users/nathan/Documents/Pictures/borders.jpg"));
+
     }
 
 }

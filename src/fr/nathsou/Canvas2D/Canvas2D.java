@@ -212,7 +212,7 @@ public class Canvas2D {
 
     public void setRGB(int x, int y, Color color) {
 
-        if (x > 0 && x < width && y > 0 && y < height)
+        if (x >= 0 && x <= width && y >= 0 && y <= height)
             pixels.set(y * width + x, color);
     }
 

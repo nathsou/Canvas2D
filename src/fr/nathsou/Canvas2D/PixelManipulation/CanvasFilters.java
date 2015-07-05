@@ -7,6 +7,7 @@ import fr.nathsou.Canvas2D.Pixmap;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by nathansoufflet on 20/06/15.
@@ -78,8 +79,8 @@ public abstract class CanvasFilters {
         copy = grayScale(copy);
         Color m = new Color(maxValue, maxValue, maxValue);
 
-        for(int i = 0; i < copy.getPixels().size(); i++){
-            copy.setNthPixel(i, (copy.getPixels().get(i).getRed() > tresh)?m:Color.black);
+        for (int i = 0; i < copy.getPixels().size(); i++) {
+            copy.setNthPixel(i, (copy.getPixels().get(i).getRed() > tresh) ? m : Color.black);
         }
 
         return copy;
@@ -89,7 +90,6 @@ public abstract class CanvasFilters {
 
         return treshold(cnv, tresh, 255);
     }
-
 
 
     public static Canvas2D pixelate(Canvas2D cnv, int sq, boolean grid) {
@@ -128,12 +128,12 @@ public abstract class CanvasFilters {
         return pixelate(cnv, sq, false);
     }
 
-    public static Canvas2D filterColor(Canvas2D cnv, Color c, float sigma){
+    public static Canvas2D filterColor(Canvas2D cnv, Color c, float sigma) {
 
         Canvas2D copy = cnv;
 
         for (int i = 0; i < copy.getPixels().size(); i++) {
-            copy.setNthPixel(i, (PixelTools.colorDistance(c, copy.getPixels().get(i)) < sigma)?copy.getPixels().get(i):Color.white);
+            copy.setNthPixel(i, (PixelTools.colorDistance(c, copy.getPixels().get(i)) < sigma) ? copy.getPixels().get(i) : Color.white);
         }
 
         return copy;
@@ -143,22 +143,57 @@ public abstract class CanvasFilters {
 
         Canvas2D copy = cnv;
 
+        sigma %= 255;
+
         for (int i = 0; i < copy.getPixels().size(); i++) {
-            copy.setNthPixel(i, (PixelTools.colorDistance(c, copy.getPixels().get(i)) < sigma)?copy.getPixels().get(i):replacementColor);
+            copy.setNthPixel(i, (PixelTools.colorDistance(c, copy.getPixels().get(i)) < sigma) ? copy.getPixels().get(i) : replacementColor);
         }
 
         return copy;
     }
 
-    public static Canvas2D replaceColor(Canvas2D cnv, Color toReplace, Color replacement, int sigma){
+    public static Canvas2D replaceColor(Canvas2D cnv, Color toReplace, Color replacement, int sigma) {
 
         Canvas2D copy = cnv;
 
         for (int i = 0; i < copy.getPixels().size(); i++) {
-            copy.setNthPixel(i, (PixelTools.colorDistance(toReplace, cnv.getPixels().get(i)) < sigma)?replacement:cnv.getPixels().get(i));
+            copy.setNthPixel(i, (PixelTools.colorDistance(toReplace, cnv.getPixels().get(i)) < sigma) ? replacement : cnv.getPixels().get(i));
         }
 
         return cnv;
     }
+
+    public static ArrayList<Integer> findContour(Canvas2D canvas, Point start) {
+
+        ArrayList<Integer> chain = new ArrayList<>();
+        Point currentPos = start;
+        Color c = canvas.getPixels().get(start.y * canvas.getWidth() + start.x);
+        int dir = 7;
+        int count = 0;
+        canvas.setStrokeColor(Color.red);
+
+        while (!(currentPos.x == start.x && currentPos.y == start.y) || count < 1) {
+            for (int i = dir; i != dir + 8; i++) {
+                double angle = (((dir + i) % 8) * (Math.PI/4));
+                int x = (int)Math.round(Math.cos(angle));
+                int y = (int)Math.round(Math.sin(angle));
+                Point p = new Point(x + currentPos.x, y + currentPos.y);
+                if (!canvas.getPixels().get(p.y * canvas.getWidth() + p.x).equals(Color.white)) {
+                    canvas.setRGB(p);
+                    chain.add((dir + i) % 8);
+                    currentPos = p;
+                    canvas.setRGB(p, Color.blue);
+                    dir = (dir + i) % 8;
+                    break;
+                }
+            }
+            count++;
+            System.out.println(currentPos + " " +  dir);
+        }
+
+
+        return chain;
+    }
+
 
 }
